@@ -1,0 +1,381 @@
+﻿<Window x:Class="FreeWindow.TheFreeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FreeWindow"
+        mc:Ignorable="d" AllowsTransparency="True"
+        Title="FreeWindow" Height="400" Width="600" WindowStyle="None" 
+        ResizeMode="NoResize" BorderBrush="Black" Background="Transparent">
+
+    <Window.Resources>
+        <Style x:Key="FwBtnStyleBase" TargetType="Button">
+            <Setter Property="Background" 
+                    Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarBackground }"/>
+            <Setter Property="Foreground"
+                    Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarForeground }"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="Border" Background="{TemplateBinding Foreground}" BorderThickness="0">
+                            <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+                                <ContentPresenter x:Name="TheContent" Content="{TemplateBinding Content}" 
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background"
+                                        Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarForeground }"></Setter>
+                                <Setter Property="Foreground" 
+                                        Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarBackground }"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="FwBtnStyleClose" TargetType="Button" >
+            <Setter Property="Background" 
+                    Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarBackground }"/>
+            <Setter Property="Foreground"
+                    Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarForeground }"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="Border" Background="{TemplateBinding Foreground}" BorderThickness="0">
+                            <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+                                <ContentPresenter x:Name="TheContent" Content="{TemplateBinding Content}" 
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background"
+                                        Value="Red"></Setter>
+                                <Setter Property="Foreground" 
+                                        Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarBackground }"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid x:Name="FwMainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderSize.Top }"></RowDefinition>
+            <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarHeight }"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderSize.Bottom }"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderSize.Left }"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderSize.Right }"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <!-- ************************* MAIN CONTENT ************************* -->
+        <Grid x:Name="FwContent" Grid.Column="1" Grid.Row="2" Margin="0" Background="White"></Grid>
+        <!-- ************************* MAIN CONTENT ************************* -->
+
+
+
+
+        <!-- ********************** TITLE BAR ELEMENTS ********************** -->
+        <Grid Grid.Row="1" Grid.Column="1" x:Name="FwTitleGrid" Margin="0" MouseDown="DragWindow"
+              Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarBackground }">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="1"></RowDefinition><!-- ROW to hold separator -->
+            </Grid.RowDefinitions>
+
+            <!-- Window Title -->
+            <Grid Grid.Row="0" Margin="10, 0" HorizontalAlignment="Left">
+                <TextBlock VerticalAlignment="Center" FontSize="18"
+                           Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarForeground }"
+                           Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=Title}" />
+            </Grid>
+            
+            <!-- Control Buttons (Minimize, Maximize, Close) -->
+            <Grid x:Name="FwTitleControlButtons" Height="30" Width="120" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                
+                
+                <!-- MINIMIZE BUTTON -->
+                <Button x:Name="FwBtnMinimize" Grid.Column="0" Margin="0" Click="MinimezeWindow" Style="{StaticResource FwBtnStyleBase}">
+                    <TextBlock FontWeight="Bold" FontSize="18">
+                        <TextBlock.Text>
+                            ¬
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Button>
+                
+                <!-- MAXIMIZE/RESTORE BUTTON -->
+                <Button x:Name="FwBtnResize" Grid.Column="1" Margin="0" Click="MaximizeWindow" Style="{StaticResource FwBtnStyleBase}">
+                    <TextBlock FontWeight="Bold" FontSize="18">
+                        <TextBlock.Text>
+                            ■
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Button>
+                
+                <!-- CLOSE BUTTON -->
+                <Button x:Name="FwBtnClose" Grid.Column="2" Margin="0" Click="CloseWindow" Style="{StaticResource FwBtnStyleClose}">
+                    <TextBlock FontWeight="Bold" FontSize="18">
+                        <TextBlock.Text>
+                            X
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Button>
+
+            </Grid>
+            
+            
+            <!-- Separator -->
+            <Rectangle Grid.Row="1" Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarForeground }"></Rectangle>
+        </Grid>
+        <!-- ********************** TITLE BAR ELEMENTS ********************** -->
+
+
+
+
+        <!-- ***********************BORDER ELEMENTS************************** -->
+        <!-- TOP -->
+        <Grid x:Name="BorderTop" Grid.Column="1" Grid.Row="0" Margin="0" Cursor="SizeNS"  MouseDown="ResizeIfPressed" MouseLeave="ResetCursor">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Top }"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Rectangle Grid.Row="0" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0.5, 1" EndPoint="0.5, 0">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Rectangle Grid.Row="1" Margin="0"
+                Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderBrush }"/>
+        </Grid>
+        <!-- BOTTOM -->
+        <Grid x:Name="BorderBottom" Grid.Column="1" Grid.Row="3" Margin="0" Cursor="SizeNS"  MouseDown="ResizeIfPressed" MouseLeave="ResetCursor">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Bottom }"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Rectangle Grid.Row="1" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Rectangle Grid.Row="0" Margin="0"
+                Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderBrush }"/>
+        </Grid>
+        <!-- LEFT -->
+        <Grid x:Name="BorderLeft" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Margin="0" Cursor="SizeWE"  MouseDown="ResizeIfPressed" MouseLeave="ResetCursor">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Left }"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Rectangle Grid.Column="0" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="1, 0.5" EndPoint="0, 0.5">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Rectangle Grid.Column="1" Margin="0"
+                Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderBrush }"/>
+        </Grid>
+        <!-- RIGHT -->
+        <Grid x:Name="BorderRight" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Margin="0" Cursor="SizeWE"  MouseDown="ResizeIfPressed" MouseLeave="ResetCursor">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Right }"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Rectangle Grid.Column="1" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0, 0.5" EndPoint="1, 0.5">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Rectangle Grid.Column="0" Margin="0"
+                Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderBrush }"/>
+        </Grid>
+        <!-- TOP LEFT -->
+        <Grid x:Name="BorderTopLeft" Grid.Column="0" Grid.Row="0" Margin="0" Cursor="SizeNWSE" MouseDown="ResizeIfPressed" MouseLeave="ResetCursor">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Top }"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Left }"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Rectangle Grid.Row="0" Grid.Column="0" Margin="0">
+                <Rectangle.Fill>
+                    <RadialGradientBrush GradientOrigin="1,1" Center="1,1" RadiusX="1" RadiusY="1">
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="1" Grid.Column="0" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="1, 0.5" EndPoint="0, 0.5">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="0" Grid.Column="1" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0.5, 1" EndPoint="0.5, 0">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="1" Grid.Column="1" Margin="0"
+                Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderBrush }"/>
+        </Grid>
+        <!-- TOP Right -->
+        <Grid x:Name="BorderTopRight" Grid.Column="2" Grid.Row="0" Margin="0" Cursor="SizeNESW" MouseDown="ResizeIfPressed" MouseLeave="ResetCursor">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Top }"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Right }"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Rectangle Grid.Row="0" Grid.Column="1" Margin="0">
+                <Rectangle.Fill>
+                    <RadialGradientBrush GradientOrigin="0,1" Center="0,1" RadiusX="1" RadiusY="1">
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="0" Grid.Column="0" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0.5, 1" EndPoint="0.5, 0">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="1" Grid.Column="1" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0, 0.5" EndPoint="1, 0.5">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="1" Grid.Column="0" Margin="0"
+                Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderBrush }"/>
+        </Grid>
+        <!-- BOTTOM LEFT -->
+        <Grid x:Name="BorderBottomLeft" Grid.Column="0" Grid.Row="3" Margin="0" Cursor="SizeNESW" MouseDown="ResizeIfPressed" MouseLeave="ResetCursor">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Top }"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Left }"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Rectangle Grid.Row="1" Grid.Column="0" Margin="0">
+                <Rectangle.Fill>
+                    <RadialGradientBrush GradientOrigin="1,0" Center="1,0" RadiusX="1" RadiusY="1">
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="0" Grid.Column="0" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="1, 0.5" EndPoint="0, 0.5">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="1" Grid.Column="1" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="0" Grid.Column="1" Margin="0"
+                Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderBrush }"/>
+        </Grid>
+        <!-- BOTTOM RIGHT -->
+        <Grid x:Name="BorderBottomRight" Grid.Column="2" Grid.Row="3" Margin="0" Cursor="SizeNWSE" MouseDown="ResizeIfPressed" MouseLeave="ResetCursor">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Top }"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowSize.Left }"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Rectangle Grid.Row="1" Grid.Column="1" Margin="0">
+                <Rectangle.Fill>
+                    <RadialGradientBrush GradientOrigin="0,0" Center="0,0" RadiusX="1" RadiusY="1">
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="0" Grid.Column="1" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0, 0.5" EndPoint="1, 0.5">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="1" Grid.Column="0" Margin="0">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                        <GradientStop Offset="0.4" Color="Transparent"></GradientStop>
+                        <GradientStop Offset="0" Color="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderShadowBrush.Color }"></GradientStop>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Row="0" Grid.Column="0" Margin="0"
+                Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=BorderBrush }"/>
+        </Grid>
+        <!-- ***********************BORDER ELEMENTS************************** -->
+    </Grid>
+</Window>
