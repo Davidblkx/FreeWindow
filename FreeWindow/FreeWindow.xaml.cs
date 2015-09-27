@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -20,7 +21,13 @@ namespace FreeWindow
         public TheFreeWindow()
         {
             InitializeComponent();
+
             StartMaximize = false;
+            IsResizable = true;
+            Title = "MENU";
+
+            AddMenuItem("Exit", s => { Close(); });
+
             InitializeFreeWindow();
         }
 
@@ -28,9 +35,7 @@ namespace FreeWindow
 
         protected void InitializeFreeWindow()
         {
-            IsResizable = true;
             IsMaximized = false;
-
             _nBorderSize = BorderSize;
             Loaded += InitializeWindowSource;
         }
@@ -53,7 +58,15 @@ namespace FreeWindow
 
         public static readonly DependencyProperty BorderShadowBrushProperty = DependencyProperty.Register(
             "BorderShadowBrush", typeof (SolidColorBrush), typeof (TheFreeWindow), new PropertyMetadata(Brushes.LightBlue));
-        
+
+        public static readonly DependencyProperty HasMenuProperty = DependencyProperty.Register(
+            "HasMenu", typeof (bool), typeof (TheFreeWindow), new PropertyMetadata(true));
+
+        public bool HasMenu
+        {
+            get { return (bool) GetValue(HasMenuProperty); }
+            set { SetValue(HasMenuProperty, value); }
+        }
         public Brush TitleBarForeground
         {
             get { return (Brush) GetValue(TitleBarForegroundProperty); }
@@ -500,6 +513,28 @@ namespace FreeWindow
         protected void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
 
+        }
+        /// <summary>
+        /// Call when show/hide menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ShowMenu(object sender, RoutedEventArgs e)
+        {
+            FwMenuPopup.IsOpen = !FwMenuPopup.IsOpen;
+        }
+        #endregion
+        
+        #region Menu
+        protected void AddMenuItem(string name, Action<string> action)
+        {
+            var btn = new Button
+            {
+                Content = name,
+                Style = Resources["FwBtnStyleBase"] as Style
+            };
+            btn.Click += (obj, e)=> { action(name); };
+            FwStackMenu.Children.Add(btn);
         }
         #endregion
 

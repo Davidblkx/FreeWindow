@@ -94,10 +94,19 @@
             </Grid.RowDefinitions>
 
             <!-- Window Title -->
-            <Grid Grid.Row="0" Margin="10, 0" HorizontalAlignment="Left">
-                <TextBlock VerticalAlignment="Center" FontSize="18"
-                           Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=TitleBarForeground }"
-                           Margin="0" Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=Title}" />
+            <Grid Margin="10, 0" VerticalAlignment="Stretch" HorizontalAlignment="Left" Grid.Row="0">
+                <Button Style="{StaticResource FwBtnStyleBase}" x:Name="FwBtnMenu" Margin="0" VerticalAlignment="Bottom"
+                        Click="ShowMenu"
+                        IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=HasMenu}">
+                    <TextBlock FontSize="18" Padding="10,0"
+                           Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:TheFreeWindow}}, Path=Title}" />
+                </Button>
+                <Popup x:Name="FwMenuPopup" IsOpen="False" Placement="Bottom" PlacementTarget="{Binding ElementName=FwBtnMenu}"
+                       MouseLeave="ShowMenu">
+                    <StackPanel x:Name="FwStackMenu" MinWidth="100" >
+                        
+                    </StackPanel>
+                </Popup>
             </Grid>
             
             <!-- Control Buttons (Minimize, Maximize, Close) -->
